@@ -255,7 +255,7 @@ public class MyGdxGame extends ApplicationAdapter {
 					"Toque para reiniciar!", larguraDispositivo / 2 - 140,
 					alturaDispositivo / 2 - gameOver.getHeight() / 2);
 			textoMelhorPontuacao.draw(batch,
-					"Seu record é: " + pontuacaoMaxima + "pontos",
+					"Seu record é: " + pontuacaoMaxima + " pontos",
 					larguraDispositivo / 2 - 140, alturaDispositivo / 2 - gameOver.getHeight());
 		}
 		batch.end();
