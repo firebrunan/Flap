@@ -55,7 +55,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	private int pontos = 0;
 	private int pontuacaoMaxima = 0;
 	private boolean passouCano = false;
-	private boolean pegouMoeda = false;
 	private int estadoJogo = 0;
 	private float posicaoHorizontalPassaro = 0;
 
@@ -108,7 +107,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		passaros[1] = new Texture("Kirby2 (1).png");
 		passaros[2] = new Texture("Kirby2 (1).png");
 
-		moedas = new Texture[3];
+		moedas = new Texture[2];
 		moedas[0] = new Texture("gold_coin (1).png");
 		moedas[1] = new Texture("silver_coin (1).png");
 
@@ -129,7 +128,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		posicaoInicialVerticalPassaro = alturaDispositivo / 2;
 		posicaoCanoHorizontal = larguraDispositivo;
 		espacoEntreCanos = 350;
-		posicaoMoedaHorizontal = larguraDispositivo+200;
+		posicaoMoedaHorizontal = larguraDispositivo+400;
 
 		textoPontuacao = new BitmapFont();
 		textoPontuacao.setColor(Color.WHITE);
@@ -193,9 +192,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 			posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime() * 200;
 			if( posicaoMoedaHorizontal < -canoTopo.getWidth() ){
-				posicaoMoedaHorizontal = larguraDispositivo+200;
-				posicaoMoedaVertical = random.nextInt(400) - 200;
-				pegouMoeda = false;
+				posicaoMoedaHorizontal = larguraDispositivo+300;
+				posicaoMoedaVertical = random.nextInt((int) alturaDispositivo);
 				variacaoMoeda++;
 			}
 			gravidade++;
@@ -214,7 +212,8 @@ public class MyGdxGame extends ApplicationAdapter {
 				posicaoHorizontalPassaro = 0;
 				posicaoInicialVerticalPassaro = alturaDispositivo / 2;
 				posicaoCanoHorizontal = larguraDispositivo;
-				posicaoMoedaHorizontal = larguraDispositivo+200;
+				posicaoMoedaHorizontal = larguraDispositivo+400;
+				posicaoMoedaVertical = random.nextInt((int) alturaDispositivo);
 			}
 		}
 	}
@@ -228,11 +227,6 @@ public class MyGdxGame extends ApplicationAdapter {
 				50 + posicaoHorizontalPassaro + passaros[0].getWidth() / 2,
 				posicaoInicialVerticalPassaro + passaros[0].getHeight() / 2,
 				passaros[0].getWidth() / 2
-		);
-		circuloMoeda.set(
-				50 + posicaoMoedaHorizontal + moedas[0].getWidth() / 2,
-				posicaoMoedaVertical + moedas[0].getHeight() / 2,
-				moedas[0].getWidth() / 2
 		);
 
 
@@ -251,7 +245,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		boolean colidiuCanoCima = Intersector.overlaps(circuloPassaro, retanguloCanoCima);
 		boolean colidiuCanoBaixo = Intersector.overlaps(circuloPassaro, retanguloCanoBaixo);
-		boolean colidiuMoeda = Intersector.overlaps(circuloPassaro, circuloMoeda);
 
 
 		if (colidiuCanoCima || colidiuCanoBaixo) {
@@ -306,11 +299,11 @@ public class MyGdxGame extends ApplicationAdapter {
 				passaros[0].getWidth() / 2
 		);
 		circuloMoeda.set(
-				50 + posicaoMoedaHorizontal + moedas[0].getWidth() / 2,
+				posicaoMoedaHorizontal + moedas[0].getWidth() / 2,
 				posicaoMoedaVertical + moedas[0].getHeight() / 2,
 				moedas[0].getWidth() / 2
 		);
-		boolean colidiuMoeda = Intersector.overlaps(circuloPassaro, circuloMoeda);
+		boolean pegouMoeda = Intersector.overlaps(circuloPassaro, circuloMoeda);
 
 		//verifica se o passaro passou pelos canos ou pegou as moedas e aumenta a pontuacao
 
@@ -323,19 +316,13 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 
 
-		if(colidiuMoeda && variacaoMoeda==0 && !pegouMoeda) {
-			if(!pegouMoeda){
-				pontos+=10;
-				pegouMoeda = true;
-				somMoeda.play();
-			}
+		if(pegouMoeda && variacaoMoeda==0) {
+			pontos+=10;
+			somMoeda.play();
 		}
-		if(colidiuMoeda && variacaoMoeda==1 && !pegouMoeda) {
-			if(!pegouMoeda){
-				pontos+=5;
-				pegouMoeda = true;
-				somMoeda.play();
-			}
+		else if(pegouMoeda) {
+			pontos+=5;
+			somMoeda.play();
 		}
 
 		variacao += Gdx.graphics.getDeltaTime() * 10;
