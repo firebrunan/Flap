@@ -128,7 +128,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		posicaoInicialVerticalPassaro = alturaDispositivo / 2;
 		posicaoCanoHorizontal = larguraDispositivo;
 		espacoEntreCanos = 350;
-		posicaoMoedaHorizontal = larguraDispositivo+200;
+		posicaoMoedaHorizontal = larguraDispositivo+300;
 
 		textoPontuacao = new BitmapFont();
 		textoPontuacao.setColor(Color.WHITE);
@@ -192,7 +192,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 			posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime() * 200;
 			if( posicaoMoedaHorizontal < -canoTopo.getWidth() ){
-				posicaoMoedaHorizontal = larguraDispositivo+200;
+				posicaoMoedaHorizontal = larguraDispositivo+300;
 				posicaoMoedaVertical = random.nextInt((int) alturaDispositivo);
 				variacaoMoeda++;
 			}
@@ -203,7 +203,6 @@ public class MyGdxGame extends ApplicationAdapter {
 				preferencias.putInteger("pontuacaoMaxima", pontuacaoMaxima);
 				preferencias.flush();
 			}
-			posicaoHorizontalPassaro -= Gdx.graphics.getDeltaTime()*500;
 
 			if(toqueTela){
 				estadoJogo = 0;
@@ -212,7 +211,7 @@ public class MyGdxGame extends ApplicationAdapter {
 				posicaoHorizontalPassaro = 0;
 				posicaoInicialVerticalPassaro = alturaDispositivo / 2;
 				posicaoCanoHorizontal = larguraDispositivo;
-				posicaoMoedaHorizontal = larguraDispositivo+200;
+				posicaoMoedaHorizontal = larguraDispositivo+300;
 				posicaoMoedaVertical = random.nextInt((int) alturaDispositivo);
 			}
 		}
@@ -263,11 +262,11 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 		if(pegouMoeda && variacaoMoeda==0){
 			pontos+=10;
-			posicaoMoedaVertical = -alturaDispositivo;
+			posicaoMoedaVertical = alturaDispositivo;
 		}
 		if(pegouMoeda && variacaoMoeda==1) {
 			pontos += 5;
-			posicaoMoedaVertical = -alturaDispositivo;
+			posicaoMoedaVertical = alturaDispositivo;
 		}
 
 	}
