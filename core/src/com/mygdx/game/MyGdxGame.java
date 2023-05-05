@@ -111,9 +111,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		moedas[0] = new Texture("gold_coin (1).png");
 		moedas[1] = new Texture("silver_coin (1).png");
 
-		fundo = new Texture("fundo.png");
-		canoBaixo = new Texture("cano_baixo_maior.png");
-		canoTopo = new Texture("cano_topo_maior.png");
+		fundo = new Texture("fundoAtt.png");
+		canoBaixo = new Texture("PilarG.png");
+		canoTopo = new Texture("PilarTopo.png");
 		gameOver = new Texture("game_over.png");
 
 	}
@@ -128,7 +128,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		posicaoInicialVerticalPassaro = alturaDispositivo / 2;
 		posicaoCanoHorizontal = larguraDispositivo;
 		espacoEntreCanos = 350;
-		posicaoMoedaHorizontal = larguraDispositivo+400;
+		posicaoMoedaHorizontal = larguraDispositivo+200;
 
 		textoPontuacao = new BitmapFont();
 		textoPontuacao.setColor(Color.WHITE);
@@ -192,7 +192,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 			posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime() * 200;
 			if( posicaoMoedaHorizontal < -canoTopo.getWidth() ){
-				posicaoMoedaHorizontal = larguraDispositivo+300;
+				posicaoMoedaHorizontal = larguraDispositivo+200;
 				posicaoMoedaVertical = random.nextInt((int) alturaDispositivo);
 				variacaoMoeda++;
 			}
@@ -212,14 +212,14 @@ public class MyGdxGame extends ApplicationAdapter {
 				posicaoHorizontalPassaro = 0;
 				posicaoInicialVerticalPassaro = alturaDispositivo / 2;
 				posicaoCanoHorizontal = larguraDispositivo;
-				posicaoMoedaHorizontal = larguraDispositivo+400;
+				posicaoMoedaHorizontal = larguraDispositivo+200;
 				posicaoMoedaVertical = random.nextInt((int) alturaDispositivo);
 			}
 		}
 	}
 
 
-	private void detectarColisoes() {
+	public void detectarColisoes() {
 
 		//aplicando colisores
 
@@ -240,9 +240,17 @@ public class MyGdxGame extends ApplicationAdapter {
 				posicaoCanoHorizontal, alturaDispositivo / 2 + espacoEntreCanos / 2 + posicaoCanoVertical,
 				canoTopo.getWidth(), canoTopo.getHeight()
 		);
+
+		circuloMoeda.set(
+				posicaoMoedaHorizontal + moedas[0].getWidth() / 2,
+				alturaDispositivo/2 + posicaoMoedaVertical + moedas[0].getHeight() / 2,
+				moedas[0].getWidth() / 2
+		);
+
 		//Checando se o passaro bateu no cano de cima ou de baixo ou nas moedas de Prata ou Ouro.
 		//Toca um som caso encoste no cano e leva ao game over e aumenta a pontuacao caso toque na moeda
 
+		boolean pegouMoeda = Intersector.overlaps(circuloPassaro, circuloMoeda);
 		boolean colidiuCanoCima = Intersector.overlaps(circuloPassaro, retanguloCanoCima);
 		boolean colidiuCanoBaixo = Intersector.overlaps(circuloPassaro, retanguloCanoBaixo);
 
@@ -252,6 +260,14 @@ public class MyGdxGame extends ApplicationAdapter {
 				somColisao.play();
 				estadoJogo = 2;
 			}
+		}
+		if(pegouMoeda && variacaoMoeda==0){
+			pontos+=10;
+			posicaoMoedaVertical = -alturaDispositivo;
+		}
+		if(pegouMoeda && variacaoMoeda==1) {
+			pontos += 5;
+			posicaoMoedaVertical = -alturaDispositivo;
 		}
 
 	}
@@ -285,6 +301,9 @@ public class MyGdxGame extends ApplicationAdapter {
 					"Seu record é: " + pontuacaoMaxima + " pontos",
 					larguraDispositivo / 2 - 140, alturaDispositivo / 2 - gameOver.getHeight());
 		}
+		if(variacaoMoeda>1)
+			variacaoMoeda=0;
+
 		batch.end();
 
 
@@ -293,17 +312,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	public void validarPontos() {
 
-		circuloPassaro.set(
-				50 + posicaoHorizontalPassaro + passaros[0].getWidth() / 2,
-				posicaoInicialVerticalPassaro + passaros[0].getHeight() / 2,
-				passaros[0].getWidth() / 2
-		);
-		circuloMoeda.set(
-				posicaoMoedaHorizontal + moedas[0].getWidth() / 2,
-				posicaoMoedaVertical + moedas[0].getHeight() / 2,
-				moedas[0].getWidth() / 2
-		);
-		boolean pegouMoeda = Intersector.overlaps(circuloPassaro, circuloMoeda);
 
 		//verifica se o passaro passou pelos canos ou pegou as moedas e aumenta a pontuacao
 
@@ -315,23 +323,10 @@ public class MyGdxGame extends ApplicationAdapter {
 			}
 		}
 
-
-		if(pegouMoeda && variacaoMoeda==0) {
-			pontos+=10;
-			somMoeda.play();
-		}
-		else if(pegouMoeda) {
-			pontos+=5;
-			somMoeda.play();
-		}
-
 		variacao += Gdx.graphics.getDeltaTime() * 10;
 
 		if (variacao > 3)
 			variacao = 0;
-
-		if(variacaoMoeda>1)
-			variacaoMoeda=0;
 	}
 
 
