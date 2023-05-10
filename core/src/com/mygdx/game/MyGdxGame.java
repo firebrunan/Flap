@@ -39,6 +39,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	private Circle circuloMoeda;
 	private Rectangle retanguloCanoCima;
 	private Rectangle retanguloCanoBaixo;
+	private Rectangle retanguloTopo;
+	private Rectangle retanguloFundo;
 
 	private float larguraDispositivo;
 	private float alturaDispositivo;
@@ -147,6 +149,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		circuloMoeda = new Circle();
 		retanguloCanoBaixo = new Rectangle();
 		retanguloCanoCima = new Rectangle();
+		retanguloTopo = new Rectangle();
+		retanguloFundo = new Rectangle();
 
 		somVoando = Gdx.audio.newSound( Gdx.files.internal("som_asa.wav") );
 		somColisao = Gdx.audio.newSound( Gdx.files.internal("som_batida.wav") );
@@ -245,6 +249,14 @@ public class MyGdxGame extends ApplicationAdapter {
 				alturaDispositivo/2 + posicaoMoedaVertical + moedas[0].getHeight() / 2,
 				moedas[0].getWidth() / 2
 		);
+		retanguloTopo.set(
+				50 + posicaoHorizontalPassaro + passaros[0].getWidth() / 2, alturaDispositivo,
+				passaros[0].getWidth() / 2, 10
+		);
+		retanguloFundo.set(
+				50 + posicaoHorizontalPassaro + passaros[0].getWidth() / 2, 0,
+				passaros[0].getWidth() / 2, 10
+		);
 
 		//Checando se o passaro bateu no cano de cima ou de baixo ou nas moedas de Prata ou Ouro.
 		//Toca um som caso encoste no cano e leva ao game over e aumenta a pontuacao caso toque na moeda
@@ -252,14 +264,17 @@ public class MyGdxGame extends ApplicationAdapter {
 		boolean pegouMoeda = Intersector.overlaps(circuloPassaro, circuloMoeda);
 		boolean colidiuCanoCima = Intersector.overlaps(circuloPassaro, retanguloCanoCima);
 		boolean colidiuCanoBaixo = Intersector.overlaps(circuloPassaro, retanguloCanoBaixo);
+		boolean colidiuTopo = Intersector.overlaps(circuloPassaro, retanguloTopo);
+		boolean colidiuFundo = Intersector.overlaps(circuloPassaro, retanguloFundo);
 
 
-		if (colidiuCanoCima || colidiuCanoBaixo) {
+		if (colidiuCanoCima || colidiuCanoBaixo || colidiuTopo || colidiuFundo) {
 			if(estadoJogo ==1) {
 				somColisao.play();
 				estadoJogo = 2;
 			}
 		}
+
 		if(pegouMoeda && variacaoMoeda==0){
 			pontos+=10;
 			posicaoMoedaVertical = alturaDispositivo;
