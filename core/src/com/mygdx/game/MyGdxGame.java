@@ -130,7 +130,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		posicaoInicialVerticalPassaro = alturaDispositivo / 2;
 		posicaoCanoHorizontal = larguraDispositivo;
 		espacoEntreCanos = 350;
-		posicaoMoedaHorizontal = larguraDispositivo+300;
+		posicaoMoedaHorizontal = larguraDispositivo+100;
 
 		textoPontuacao = new BitmapFont();
 		textoPontuacao.setColor(Color.WHITE);
@@ -196,9 +196,22 @@ public class MyGdxGame extends ApplicationAdapter {
 
 			posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime() * 200;
 			if( posicaoMoedaHorizontal < -canoTopo.getWidth() ){
-				posicaoMoedaHorizontal = larguraDispositivo+300;
+				posicaoMoedaHorizontal = larguraDispositivo+100;
 				posicaoMoedaVertical = random.nextInt((int) alturaDispositivo);
 				variacaoMoeda++;
+			}
+			//a
+			if(pontos>=1){
+				posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime() * 200;
+				posicaoCanoHorizontal -= Gdx.graphics.getDeltaTime() * 200;
+			}
+			if(pontos>=5){
+				posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime() * 200;
+				posicaoCanoHorizontal -= Gdx.graphics.getDeltaTime() * 200;
+			}
+			if(pontos>=15){
+				posicaoMoedaHorizontal -= Gdx.graphics.getDeltaTime() * 200;
+				posicaoCanoHorizontal -= Gdx.graphics.getDeltaTime() * 200;
 			}
 			gravidade++;
 		}else if(estadoJogo ==2) {
@@ -215,7 +228,7 @@ public class MyGdxGame extends ApplicationAdapter {
 				posicaoHorizontalPassaro = 0;
 				posicaoInicialVerticalPassaro = alturaDispositivo / 2;
 				posicaoCanoHorizontal = larguraDispositivo;
-				posicaoMoedaHorizontal = larguraDispositivo+300;
+				posicaoMoedaHorizontal = larguraDispositivo+100;
 				posicaoMoedaVertical = random.nextInt((int) alturaDispositivo);
 			}
 		}
